@@ -2,9 +2,26 @@
 // seed: tests/seed.spec.ts
 
 import { test, expect } from "@playwright/test";
+import * as allure from "allure-js-commons";
 
 test.describe("Form Validation - Empty Fields", () => {
+  test.beforeEach(async ({ page }) => {
+    await allure.feature("Authentication");
+    await allure.story("Form Validation - Empty Fields");
+  });
+
+  test.afterEach(async ({ page }) => {
+    // if test failed, capture screenshot and attach to Allure report
+    if (test.info().status === test.info().expectedStatus) {
+      return; // test passed, no need to capture
+    }
+    await allure.attachment("Screenshot", await page.screenshot(), "image/png");
+  });
+
   test("3.1 Login fails when both fields are empty", async ({ page }) => {
+    await allure.story(
+      "As an active user, I want to see an error message when trying to log in with both fields empty",
+    );
     // Navigate to https://the-internet.herokuapp.com/login
     await page.goto("https://the-internet.herokuapp.com/login");
     await expect(
@@ -25,6 +42,9 @@ test.describe("Form Validation - Empty Fields", () => {
   });
 
   test("3.2 Login fails when only username is empty", async ({ page }) => {
+    await allure.story(
+      "As an active user, I want to see an error message when only the username is empty",
+    );
     // Navigate to https://the-internet.herokuapp.com/login
     await page.goto("https://the-internet.herokuapp.com/login");
     await expect(
@@ -50,6 +70,9 @@ test.describe("Form Validation - Empty Fields", () => {
   });
 
   test("3.3 Login fails when only password is empty", async ({ page }) => {
+    await allure.story(
+      "As an active user, I want to see an error message when only the password is empty",
+    );
     // Navigate to https://the-internet.herokuapp.com/login
     await page.goto("https://the-internet.herokuapp.com/login");
     await expect(

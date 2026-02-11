@@ -2,9 +2,26 @@
 // seed: tests/seed.spec.ts
 
 import { test, expect } from "@playwright/test";
+import * as allure from "allure-js-commons";
 
 test.describe("Authentication - Invalid Credentials", () => {
+  test.beforeEach(async ({ page }) => {
+    await allure.feature("Authentication");
+    await allure.story("Authentication - Invalid Credentials");
+  });
+
+  test.afterEach(async ({ page }) => {
+    // if test failed, capture screenshot and attach to Allure report
+    if (test.info().status === test.info().expectedStatus) {
+      return; // test passed, no need to capture
+    }
+    await allure.attachment("Screenshot", await page.screenshot(), "image/png");
+  });
+
   test("2.1 Login fails with invalid username", async ({ page }) => {
+    await allure.story(
+      "As an active user, I want to see an error message when entering an invalid username",
+    );
     // Navigate to https://the-internet.herokuapp.com/login
     await page.goto("https://the-internet.herokuapp.com/login");
     await expect(
@@ -47,6 +64,9 @@ test.describe("Authentication - Invalid Credentials", () => {
   });
 
   test("2.2 Login fails with invalid password", async ({ page }) => {
+    await allure.story(
+      "As an active user, I want to see an error message when entering an invalid password",
+    );
     // Navigate to https://the-internet.herokuapp.com/login
     await page.goto("https://the-internet.herokuapp.com/login");
     await expect(
@@ -87,6 +107,9 @@ test.describe("Authentication - Invalid Credentials", () => {
   });
 
   test("2.3 Login fails with both credentials invalid", async ({ page }) => {
+    await allure.story(
+      "As an active user, I want to see an error message when both username and password are invalid",
+    );
     // Navigate to https://the-internet.herokuapp.com/login
     await page.goto("https://the-internet.herokuapp.com/login");
     await expect(

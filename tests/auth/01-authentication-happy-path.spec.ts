@@ -2,9 +2,26 @@
 // seed: tests/seed.spec.ts
 
 import { test, expect } from "@playwright/test";
+import * as allure from "allure-js-commons";
 
 test.describe("Authentication - Happy Path", () => {
+  test.beforeEach(async ({ page }) => {
+    await allure.feature("Authentication");
+    await allure.story("Authentication - Happy Path");
+  });
+
+  test.afterEach(async ({ page }) => {
+    // if test failed, capture screenshot and attach to Allure report
+    if (test.info().status === test.info().expectedStatus) {
+      return; // test passed, no need to capture
+    }
+    await allure.attachment("Screenshot", await page.screenshot(), "image/png");
+  });
+
   test("1.1 Successful login with valid credentials", async ({ page }) => {
+    await allure.story(
+      "As an active user, I want to successfully sign in using a valid password",
+    );
     // Navigate to https://the-internet.herokuapp.com/login
     await page.goto("https://the-internet.herokuapp.com/login");
     await expect(
@@ -51,6 +68,9 @@ test.describe("Authentication - Happy Path", () => {
   });
 
   test("1.2 Login form displays correct instructions", async ({ page }) => {
+    await allure.story(
+      "As an active user, I want to see correct login instructions",
+    );
     // Navigate to https://the-internet.herokuapp.com/login
     await page.goto("https://the-internet.herokuapp.com/login");
 

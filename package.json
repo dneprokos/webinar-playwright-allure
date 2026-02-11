@@ -10,6 +10,10 @@
   "description": "",
   "devDependencies": {
     "@playwright/test": "^1.58.2",
-    "@types/node": "^25.2.3"
+    "@types/node": "^25.2.3",
+    "allure-playwright": "^3.4.5"
+  },
+  "dependencies": {
+    "allure-js-commons": "^3.4.5"
   }
 }

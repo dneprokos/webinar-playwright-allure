@@ -2,9 +2,26 @@
 // seed: tests/seed.spec.ts
 
 import { test, expect } from "@playwright/test";
+import * as allure from "allure-js-commons";
 
 test.describe("Case Sensitivity & Edge Cases", () => {
+  test.beforeEach(async ({ page }) => {
+    await allure.feature("Authentication");
+    await allure.story("Case Sensitivity & Edge Cases");
+  });
+
+  test.afterEach(async ({ page }) => {
+    // if test failed, capture screenshot and attach to Allure report
+    if (test.info().status === test.info().expectedStatus) {
+      return; // test passed, no need to capture
+    }
+    await allure.attachment("Screenshot", await page.screenshot(), "image/png");
+  });
+
   test("4.1 Username is case-sensitive", async ({ page }) => {
+    await allure.story(
+      "As an active user, I want to see an error message when entering an incorrect case username",
+    );
     // Navigate to https://the-internet.herokuapp.com/login
     await page.goto("https://the-internet.herokuapp.com/login");
     await expect(
@@ -37,6 +54,9 @@ test.describe("Case Sensitivity & Edge Cases", () => {
   });
 
   test("4.2 Password is case-sensitive", async ({ page }) => {
+    await allure.story(
+      "As an active user, I want to see an error message when entering an incorrect case password",
+    );
     // Navigate to https://the-internet.herokuapp.com/login
     await page.goto("https://the-internet.herokuapp.com/login");
     await expect(
@@ -69,6 +89,9 @@ test.describe("Case Sensitivity & Edge Cases", () => {
   });
 
   test("4.3 Whitespace in fields is treated as invalid", async ({ page }) => {
+    await allure.story(
+      "As an active user, I want to see an error message when whitespace is present in either field",
+    );
     // Navigate to https://the-internet.herokuapp.com/login
     await page.goto("https://the-internet.herokuapp.com/login");
     await expect(
@@ -95,6 +118,9 @@ test.describe("Case Sensitivity & Edge Cases", () => {
   });
 
   test("4.4 Login with extra whitespace in password", async ({ page }) => {
+    await allure.story(
+      "As an active user, I want to see an error message when whitespace is present in the password field",
+    );
     // Navigate to https://the-internet.herokuapp.com/login
     await page.goto("https://the-internet.herokuapp.com/login");
     await expect(
