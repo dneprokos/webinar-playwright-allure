@@ -7,21 +7,25 @@ import * as allure from "allure-js-commons";
 test.describe("Authentication - Invalid Credentials", () => {
   test.beforeEach(async ({ page }) => {
     await allure.feature("Authentication");
-    await allure.story("Authentication - Invalid Credentials");
   });
 
-  test.afterEach(async ({ page }) => {
-    // if test failed, capture screenshot and attach to Allure report
-    if (test.info().status === test.info().expectedStatus) {
-      return; // test passed, no need to capture
-    }
-    await allure.attachment("Screenshot", await page.screenshot(), "image/png");
-  });
+  //   test.afterEach(async ({ page }, testInfo) => {
+  //     if (testInfo.status === testInfo.expectedStatus) return;
+
+  //     await testInfo.attach("Screenshot", {
+  //       body: await page.screenshot({ fullPage: true }),
+  //       contentType: "image/png",
+  //     });
+  //   });
 
   test("2.1 Login fails with invalid username", async ({ page }) => {
     await allure.story(
       "As an active user, I want to see an error message when entering an invalid username",
     );
+    await allure.tag("test-bug");
+    await allure.label("defectType", "test");
+    await allure.tag("test-bug");
+    await allure.label("owner", "QA");
     // Navigate to https://the-internet.herokuapp.com/login
     await page.goto("https://the-internet.herokuapp.com/login");
     await expect(
@@ -63,7 +67,7 @@ test.describe("Authentication - Invalid Credentials", () => {
     await expect(page.getByRole("button", { name: /Login/i })).toBeVisible();
   });
 
-  test("2.2 Login fails with invalid password", async ({ page }) => {
+  test.skip("2.2 Login fails with invalid password", async ({ page }) => {
     await allure.story(
       "As an active user, I want to see an error message when entering an invalid password",
     );
@@ -82,7 +86,7 @@ test.describe("Authentication - Invalid Credentials", () => {
     // Enter password 'wrongpassword' in the Password field
     await page.getByRole("textbox", { name: "Password" }).fill("wrongpassword");
     await expect(page.getByRole("textbox", { name: "Password" })).toHaveValue(
-      "wrongpassword",
+      "wrongpassword1",
     );
 
     // Click the Login button

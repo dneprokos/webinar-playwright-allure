@@ -5,18 +5,18 @@ import { test, expect } from "@playwright/test";
 import * as allure from "allure-js-commons";
 
 test.describe("Case Sensitivity & Edge Cases", () => {
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({}) => {
     await allure.feature("Authentication");
-    await allure.story("Case Sensitivity & Edge Cases");
   });
 
-  test.afterEach(async ({ page }) => {
-    // if test failed, capture screenshot and attach to Allure report
-    if (test.info().status === test.info().expectedStatus) {
-      return; // test passed, no need to capture
-    }
-    await allure.attachment("Screenshot", await page.screenshot(), "image/png");
-  });
+  //   test.afterEach(async ({ page }, testInfo) => {
+  //     if (testInfo.status === testInfo.expectedStatus) return;
+
+  //     await testInfo.attach("Screenshot", {
+  //       body: await page.screenshot({ fullPage: true }),
+  //       contentType: "image/png",
+  //     });
+  //   });
 
   test("4.1 Username is case-sensitive", async ({ page }) => {
     await allure.story(

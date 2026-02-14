@@ -7,21 +7,22 @@ import * as allure from "allure-js-commons";
 test.describe("Authentication - Happy Path", () => {
   test.beforeEach(async ({ page }) => {
     await allure.feature("Authentication");
-    await allure.story("Authentication - Happy Path");
   });
 
-  test.afterEach(async ({ page }) => {
-    // if test failed, capture screenshot and attach to Allure report
-    if (test.info().status === test.info().expectedStatus) {
-      return; // test passed, no need to capture
-    }
-    await allure.attachment("Screenshot", await page.screenshot(), "image/png");
-  });
+  //   test.afterEach(async ({ page }, testInfo) => {
+  //     if (testInfo.status === testInfo.expectedStatus) return;
+
+  //     await testInfo.attach("Screenshot", {
+  //       body: await page.screenshot({ fullPage: true }),
+  //       contentType: "image/png",
+  //     });
+  //   });
 
   test("1.1 Successful login with valid credentials", async ({ page }) => {
     await allure.story(
       "As an active user, I want to successfully sign in using a valid password",
     );
+
     // Navigate to https://the-internet.herokuapp.com/login
     await page.goto("https://the-internet.herokuapp.com/login");
     await expect(
@@ -84,7 +85,7 @@ test.describe("Authentication - Happy Path", () => {
     await expect(instructions).toContainText("tomsmith");
 
     // Verify instructions text contains 'SuperSecretPassword!' as the valid password
-    await expect(instructions).toContainText("SuperSecretPassword!");
+    await expect(instructions).toContainText("SuperSecretPassword!2");
 
     // Verify instructions mention error messages for wrong information
     await expect(instructions).toContainText("error messages");

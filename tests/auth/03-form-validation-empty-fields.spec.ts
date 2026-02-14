@@ -7,16 +7,16 @@ import * as allure from "allure-js-commons";
 test.describe("Form Validation - Empty Fields", () => {
   test.beforeEach(async ({ page }) => {
     await allure.feature("Authentication");
-    await allure.story("Form Validation - Empty Fields");
   });
 
-  test.afterEach(async ({ page }) => {
-    // if test failed, capture screenshot and attach to Allure report
-    if (test.info().status === test.info().expectedStatus) {
-      return; // test passed, no need to capture
-    }
-    await allure.attachment("Screenshot", await page.screenshot(), "image/png");
-  });
+  //   test.afterEach(async ({ page }, testInfo) => {
+  //     if (testInfo.status === testInfo.expectedStatus) return;
+
+  //     await testInfo.attach("Screenshot", {
+  //       body: await page.screenshot({ fullPage: true }),
+  //       contentType: "image/png",
+  //     });
+  //   });
 
   test("3.1 Login fails when both fields are empty", async ({ page }) => {
     await allure.story(

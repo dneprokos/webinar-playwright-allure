@@ -1,0 +1,8 @@
+{
+    "name": "GitHub Actions",
+    "type": "github",
+    "url": "https://github.com/dneprokos/webinar-playwright-allure",
+    "buildUrl": "https://github.com/dneprokos/webinar-playwright-allure/actions",
+    "buildName": "Playwright Tests",
+    "buildNumber": "1"
+}
