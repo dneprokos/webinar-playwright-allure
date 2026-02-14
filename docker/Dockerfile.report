@@ -1,7 +1,7 @@
 # Dockerfile for serving Allure reports with full history
 # Uses existing allure-results (and optional history from previous report)
 
-FROM node:20-bookworm-slim
+FROM node:20-bookworm
 
 # Install Java (required by allure-commandline) and serve for static report
 RUN apt-get update && apt-get install -y --no-install-recommends \
