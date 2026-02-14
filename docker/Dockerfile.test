@@ -1,0 +1,33 @@
+# Dockerfile for running Playwright tests and serving Allure reports
+# Runs tests -> generates report (with history) -> serves report
+
+FROM mcr.microsoft.com/playwright:v1.58.2-jammy
+
+# Install Java (required by allure-commandline) and serve for static report
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    openjdk-17-jre-headless \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Install Allure CLI and static server globally
+RUN npm install -g allure-commandline@2.36.0 \
+    && npm install -g serve@14.2.4
+
+# Copy project files
+COPY package.json package-lock.json* ./
+RUN npm ci
+
+COPY playwright.config.ts global-setup.ts allure-categories.json ./
+COPY tests ./tests
+
+# Default port for the report UI
+ENV ALLURE_PORT=5050
+
+# Script: run tests, preserve history, generate report, serve
+COPY docker/docker-test-entrypoint.sh /docker-test-entrypoint.sh
+RUN chmod +x /docker-test-entrypoint.sh
+
+EXPOSE ${ALLURE_PORT}
+
+ENTRYPOINT ["/docker-test-entrypoint.sh"]

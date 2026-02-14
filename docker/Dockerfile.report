@@ -1,0 +1,31 @@
+# Dockerfile for serving Allure reports with full history
+# Uses existing allure-results (and optional history from previous report)
+
+FROM node:20-bookworm-slim
+
+# Install Java (required by allure-commandline) and serve for static report
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    openjdk-17-jre-headless \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Install Allure CLI and static server
+RUN npm install -g allure-commandline@2.36.0 \
+    && npm install -g serve@14.2.4
+
+# Default port for the report UI
+ENV ALLURE_PORT=5050
+
+# Copy allure-results into the image (so report can be served without a volume mount).
+# Ensure allure-results exists before building (e.g. run tests first).
+RUN mkdir -p /data/allure-results /data/allure-report
+COPY allure-results /data/allure-results/
+
+# Script: preserve history, generate report, serve
+COPY docker/docker-report-entrypoint.sh /docker-report-entrypoint.sh
+RUN chmod +x /docker-report-entrypoint.sh
+
+EXPOSE ${ALLURE_PORT}
+
+ENTRYPOINT ["/docker-report-entrypoint.sh"]
